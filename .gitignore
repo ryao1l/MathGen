@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.env
+.pytest_cache/
+.ruff_cache/
+
+# Local debugging and temporary artifacts.
+debug*/
+*_debug/
+tmp/
+scratch/
+
+# Local run outputs can be regenerated.
+results/current/
+
+# Keep bulky generated assets out of normal Git history unless they are
+# intentionally tracked through Git LFS or mirrored to Hugging Face.
+data/generated_img/*
+!data/generated_img/.gitkeep
+data/ground_truth_img/*
+!data/ground_truth_img/.gitkeep
+_local_archive_not_for_release/
+mathgen_local_archive_not_for_github_*/

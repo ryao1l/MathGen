@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+import argparse
+import contextlib
+import io
+import json
+import math
+import os
+import re
+import sys
+from itertools import combinations, permutations
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+import cv2
+import numpy as np
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from evaluator_utils import print_report
+from ocr_label_utils import find_labels_in_circles, point_in_circle, verify_circle_and_rect_labels, verify_circle_labels
+PROMPT_ID = 2
+Circle = Tuple[float, float, float]
+
+def blue_mask_hsv(bgr):
+    hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, np.array([100, 50, 50]), np.array([130, 255, 255]))
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((7, 7), np.uint8))
+    return mask
+
+def black_edge_map(bgr):
+    gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+    _, inv = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
+    inv = cv2.morphologyEx(inv, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    inv = cv2.morphologyEx(inv, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+    return cv2.Canny(inv, 50, 150)
+
+def hough_circles(img, dp, md, p1, p2, rmin, rmax):
+    c = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, dp=dp, minDist=md, param1=p1, param2=p2, minRadius=rmin, maxRadius=rmax)
+    if c is None:
+        return []
+    return [(float(x), float(y), float(r)) for x, y, r in c[0]]
+
+def dedupe_circles(circles, ct=25.0, rt=25.0):
+    out = []
+    for cx, cy, cr in sorted(circles, key=lambda t: t[2], reverse=True):
+        if any((np.hypot(cx - sx, cy - sy) < ct and abs(cr - sr) < rt for sx, sy, sr in out)):
+            continue
+        out.append((cx, cy, cr))
+    return out
+
+def circle_perimeter_support(edge, circ, n=360, band=3):
+    h, w = edge.shape[:2]
+    cx, cy, r = circ
+    if r <= 1:
+        return 0.0
+    ang = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    xs = np.round(cx + r * np.cos(ang)).astype(np.int32)
+    ys = np.round(cy + r * np.sin(ang)).astype(np.int32)
+    ok = total = 0
+    for x, y in zip(xs, ys):
+        if x < 0 or x >= w or y < 0 or (y >= h):
+            continue
+        total += 1
+        ok += int(np.any(edge[max(0, y - band):min(h, y + band + 1), max(0, x - band):min(w, x + band + 1)] > 0))
+    return ok / total if total else 0.0
+
+def circle_mask(hw, circ):
+    m = np.zeros(hw, np.uint8)
+    cv2.circle(m, (int(round(circ[0])), int(round(circ[1]))), int(round(circ[2])), 255, -1)
+    return m
+
+def color_ratio(region, color):
+    d = int(cv2.countNonZero(region))
+    return float(cv2.countNonZero(cv2.bitwise_and(color, region))) / d if d else 0.0
+
+def _assignment_passes(img, circles, bm, on_thresh, off_thresh, spill_max):
+    h, w = img.shape[:2]
+    passed = []
+    for i, j in [(0, 1), (1, 0)]:
+        ca, cb = (circles[i], circles[j])
+        ma = circle_mask((h, w), ca)
+        mb = circle_mask((h, w), cb)
+        a_only = ma & ~mb
+        inter = ma & mb
+        b_only = mb & ~ma
+        r_ao = color_ratio(a_only, bm)
+        r_i = color_ratio(inter, bm)
+        r_bo = color_ratio(b_only, bm)
+        union = ma | mb
+        outside = ~(union > 0)
+        bo = int(np.sum(outside & (bm > 0)))
+        tb = int(np.sum(bm > 0))
+        sp = bo / tb if tb else 0.0
+        ok = r_ao >= on_thresh and r_i <= off_thresh and (r_bo <= off_thresh) and (sp <= spill_max)
+        if ok:
+            passed.append((ca, cb))
+    return passed
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def evaluate(image_path, on_thresh=0.2, off_thresh=0.05, support=0.43, spill_max=0.05):
+    if not os.path.exists(image_path):
+        print('C1_file_exists: False')
+        print('Result: FAIL')
+        return False
+    img = cv2.imread(image_path)
+    if img is None:
+        print('C1_image_readable: False')
+        print('Result: FAIL')
+        return False
+    h, w = img.shape[:2]
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    print('C1_file_exists: True')
+    print('C1_image_readable: True')
+    edges = black_edge_map(img)
+    md = min(h, w)
+    ac = []
+    for dp, d, p1, p2, rn, rx in [(1.2, 0.1 * md, 80, 40, int(0.1 * md), int(0.35 * md)), (1.2, 0.1 * md, 80, 35, int(0.3 * md), int(0.8 * md))]:
+        ac.extend(hough_circles(edges, dp, d, p1, p2, rn, rx))
+    ac = dedupe_circles(ac)
+    circles = [c for c in ac if circle_perimeter_support(edges, c) >= support]
+    print(f'C2_circles_found: {len(circles)}')
+    if len(circles) < 2:
+        print('Result: FAIL')
+        return False
+    circles = circles[:2]
+    hits = find_labels_in_circles(image_path, circles, target_letters=['A', 'B'])
+    lmap = {}
+    used_circles = set()
+    label_ok = True
+    for letter in ['A', 'B']:
+        letter_hits = [(l, cx, cy, c) for l, cx, cy, c in hits if l == letter]
+        if not letter_hits:
+            print(f'C3_label_{letter}_ok: False (not detected)')
+            label_ok = False
+            continue
+        letter_hits.sort(key=lambda h: h[3], reverse=True)
+        _, lx, ly, conf = letter_hits[0]
+        inside = [i for i, c in enumerate(circles) if point_in_circle(lx, ly, c)]
+        if inside and inside[0] not in used_circles:
+            used_circles.add(inside[0])
+            lmap[letter] = inside[0]
+            print(f'C3_label_{letter}_ok: True (conf={conf:.3f})')
+        else:
+            print(f'C3_label_{letter}_ok: False (not inside unique circle)')
+            label_ok = False
+    if not label_ok or 'A' not in lmap or 'B' not in lmap:
+        bm = blue_mask_hsv(img)
+        fallback = _assignment_passes(img, circles, bm, on_thresh, off_thresh, spill_max)
+        if len(fallback) == 1:
+            print('C3_labels_all_ok: True (color_assignment_fallback)')
+            print('Result: PASS')
+            return True
+        print('C3_labels_all_ok: False')
+        print('Result: FAIL')
+        return False
+    print('C3_labels_all_ok: True')
+    bm = blue_mask_hsv(img)
+    ca, cb = (circles[lmap['A']], circles[lmap['B']])
+    ma = circle_mask((h, w), ca)
+    mb = circle_mask((h, w), cb)
+    a_only = ma & ~mb
+    inter = ma & mb
+    b_only = mb & ~ma
+    r_ao = color_ratio(a_only, bm)
+    r_i = color_ratio(inter, bm)
+    r_bo = color_ratio(b_only, bm)
+    c4_ao = r_ao >= on_thresh
+    c4_i = r_i <= off_thresh
+    c4_bo = r_bo <= off_thresh
+    c4 = c4_ao and c4_i and c4_bo
+    union = ma | mb
+    outside = ~(union > 0)
+    bo = int(np.sum(outside & (bm > 0)))
+    tb = int(np.sum(bm > 0))
+    sp = bo / tb if tb else 0.0
+    c5 = sp <= spill_max
+    print(f'C4_A_only_blue: {r_ao:.3f} ok={c4_ao}')
+    print(f'C4_intersection_blue: {r_i:.3f} ok={c4_i}')
+    print(f'C4_B_only_blue: {r_bo:.3f} ok={c4_bo}')
+    print(f'C5_spill: {sp:.4f} ok={c5}')
+    passed = c4 and c5
+    print(f"Result: {('PASS' if passed else 'FAIL')}")
+    return passed
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description='Evaluate MathGen set case 2.')
+    parser.add_argument('--image', type=str, required=True, help='Path to the generated image.')
+    args = parser.parse_args()
+    print_report(evaluate(args.image))
+if __name__ == '__main__':
+    main()

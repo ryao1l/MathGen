@@ -1,0 +1,50 @@
+{"id": 1, "topic": "counting", "prompt": "An image containing exactly 17 oranges.", "subtopic": "exact_counting", "original_id": 13}
+{"id": 2, "topic": "counting", "prompt": "An image containing exactly 18 oranges.", "subtopic": "exact_counting", "original_id": 14}
+{"id": 3, "topic": "counting", "prompt": "An image containing exactly 19 oranges.", "subtopic": "exact_counting", "original_id": 15}
+{"id": 4, "topic": "counting", "prompt": "An image containing exactly 20 oranges.", "subtopic": "exact_counting", "original_id": 16}
+{"id": 5, "topic": "counting", "prompt": "An image containing exactly 21 oranges.", "subtopic": "exact_counting", "original_id": 17}
+{"id": 6, "topic": "counting", "prompt": "An image containing exactly 22 oranges.", "subtopic": "exact_counting", "original_id": 18}
+{"id": 7, "topic": "counting", "prompt": "An image containing exactly 23 broccoli.", "subtopic": "exact_counting", "original_id": 19}
+{"id": 8, "topic": "counting", "prompt": "An image containing exactly 24 broccoli.", "subtopic": "exact_counting", "original_id": 20}
+{"id": 9, "topic": "counting", "prompt": "An image containing exactly 25 broccoli.", "subtopic": "exact_counting", "original_id": 21}
+{"id": 10, "topic": "counting", "prompt": "An image containing exactly 6 broccoli.", "subtopic": "exact_counting", "original_id": 22}
+{"id": 11, "topic": "counting", "prompt": "An image containing exactly 5 broccoli.", "subtopic": "exact_counting", "original_id": 23}
+{"id": 12, "topic": "counting", "prompt": "An image containing exactly 8 carrots.", "subtopic": "exact_counting", "original_id": 24}
+{"id": 13, "topic": "counting", "prompt": "An image containing exactly 7 carrots.", "subtopic": "exact_counting", "original_id": 25}
+{"id": 14, "topic": "counting", "prompt": "An image containing exactly 10 carrots.", "subtopic": "exact_counting", "original_id": 26}
+{"id": 15, "topic": "counting", "prompt": "An image containing exactly 9 carrots.", "subtopic": "exact_counting", "original_id": 27}
+{"id": 16, "topic": "counting", "prompt": "An image containing exactly 12 carrots.", "subtopic": "exact_counting", "original_id": 28}
+{"id": 17, "topic": "counting", "prompt": "An image containing exactly 11 carrots.", "subtopic": "exact_counting", "original_id": 29}
+{"id": 18, "topic": "counting", "prompt": "An image containing exactly 14 carrots.", "subtopic": "exact_counting", "original_id": 30}
+{"id": 19, "topic": "counting", "prompt": "An image containing exactly 20 oranges.", "subtopic": "exact_counting", "original_id": 38}
+{"id": 20, "topic": "counting", "prompt": "An image containing exactly 22 broccoli.", "subtopic": "exact_counting", "original_id": 39}
+{"id": 21, "topic": "counting", "prompt": "An image containing exactly 24 carrots.", "subtopic": "exact_counting", "original_id": 40}
+{"id": 22, "topic": "counting", "prompt": "An image containing exactly 30 oranges.", "subtopic": "exact_counting", "original_id": 43}
+{"id": 23, "topic": "counting", "prompt": "An image containing exactly 7 broccoli.", "subtopic": "exact_counting", "original_id": 44}
+{"id": 24, "topic": "counting", "prompt": "An image containing exactly 9 carrots.", "subtopic": "exact_counting", "original_id": 45}
+{"id": 25, "topic": "counting", "prompt": "A pile of broccoli on a table. There are exactly 18 broccoli in the pile.", "subtopic": "exact_counting", "original_id": 48}
+{"id": 26, "topic": "counting", "prompt": "An image containing exactly 5 red apples.", "subtopic": "attribute_based_counting", "original_id": 1}
+{"id": 27, "topic": "counting", "prompt": "An image containing exactly 6 red apples.", "subtopic": "attribute_based_counting", "original_id": 2}
+{"id": 28, "topic": "counting", "prompt": "An image containing exactly 7 red apples.", "subtopic": "attribute_based_counting", "original_id": 3}
+{"id": 29, "topic": "counting", "prompt": "An image containing exactly 8 red apples.", "subtopic": "attribute_based_counting", "original_id": 4}
+{"id": 30, "topic": "counting", "prompt": "An image containing exactly 9 red apples.", "subtopic": "attribute_based_counting", "original_id": 5}
+{"id": 31, "topic": "counting", "prompt": "An image containing exactly 10 red apples.", "subtopic": "attribute_based_counting", "original_id": 6}
+{"id": 32, "topic": "counting", "prompt": "An image containing exactly 11 green apples.", "subtopic": "attribute_based_counting", "original_id": 7}
+{"id": 33, "topic": "counting", "prompt": "An image containing exactly 12 green apples.", "subtopic": "attribute_based_counting", "original_id": 8}
+{"id": 34, "topic": "counting", "prompt": "An image containing exactly 13 green apples.", "subtopic": "attribute_based_counting", "original_id": 9}
+{"id": 35, "topic": "counting", "prompt": "An image containing exactly 14 green apples.", "subtopic": "attribute_based_counting", "original_id": 10}
+{"id": 36, "topic": "counting", "prompt": "An image containing exactly 15 green apples.", "subtopic": "attribute_based_counting", "original_id": 11}
+{"id": 37, "topic": "counting", "prompt": "An image containing exactly 16 green apples.", "subtopic": "attribute_based_counting", "original_id": 12}
+{"id": 38, "topic": "counting", "prompt": "A realistic orchard scene with three apple trees at different depths. Count only the fully visible red apples hanging on branches of the center tree: there must be exactly 17. Other trees may contain apples of non-red colors only. No baskets, no fallen fruit.", "subtopic": "attribute_based_counting", "original_id": 31}
+{"id": 39, "topic": "counting", "prompt": "A realistic top-down photo of a wooden table containing many objects: red apples, red tomatoes, and red balls. Include exactly 19 red apples and at least 10 non-apple red objects to create distractors. Apples must remain clearly identifiable by stems and natural texture.", "subtopic": "attribute_based_counting", "original_id": 32}
+{"id": 40, "topic": "counting", "prompt": "A realistic market stall scene with apples under mixed warm-cool lighting and partial occlusions by leaves and price tags. Ensure exactly 21 red apples are visible (partially visible counts if clearly identifiable as apples). Avoid any mirrored reflections that duplicate apples.", "subtopic": "attribute_based_counting", "original_id": 33}
+{"id": 41, "topic": "counting", "prompt": "A realistic apple tree in light rain with water droplets and dense foliage. Exactly 23 red apples should be present, with varied sizes due to perspective, but each apple boundary should remain separable for counting. No additional red fruits.", "subtopic": "attribute_based_counting", "original_id": 34}
+{"id": 42, "topic": "counting", "prompt": "A realistic harvest scene with one large apple tree and complex branch overlap. Place exactly 25 red apples across near, mid, and far branches. Introduce mild motion blur on leaves only, while apples stay sharp enough to count unambiguously.", "subtopic": "attribute_based_counting", "original_id": 35}
+{"id": 43, "topic": "counting", "prompt": "An image containing exactly 16 red apples.", "subtopic": "attribute_based_counting", "original_id": 36}
+{"id": 44, "topic": "counting", "prompt": "An image containing exactly 18 green apples.", "subtopic": "attribute_based_counting", "original_id": 37}
+{"id": 45, "topic": "counting", "prompt": "An image containing exactly 26 red apples.", "subtopic": "attribute_based_counting", "original_id": 41}
+{"id": 46, "topic": "counting", "prompt": "An image containing exactly 28 green apples.", "subtopic": "attribute_based_counting", "original_id": 42}
+{"id": 47, "topic": "counting", "prompt": "A basket containing red apples and green apples. There are exactly 13 red apples.", "subtopic": "attribute_based_counting", "original_id": 46}
+{"id": 48, "topic": "counting", "prompt": "A market stand with oranges stacked in a display. Exactly 15 oranges are visible.", "subtopic": "attribute_based_counting", "original_id": 47}
+{"id": 49, "topic": "counting", "prompt": "A fruit display with oranges arranged in rows. Exactly 24 oranges are present.", "subtopic": "attribute_based_counting", "original_id": 50}
+{"id": 50, "topic": "counting", "prompt": "An image with red apples and green apples. There are exactly 6 red apples and 9 green apples. Count only the red ones.", "subtopic": "attribute_based_counting", "original_id": 51}
