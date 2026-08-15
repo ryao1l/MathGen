@@ -17,11 +17,13 @@ asking models to generate images for prompt-level mathematical tasks, then
 checking each output with deterministic, prompt-conditioned verification
 scripts.
 
-The benchmark covers **420 prompts** across eight topics: counting, angle,
-fraction, set, open-scene, plane geometry, solid geometry, and function plots.
-Each evaluator checks the mathematical relation specified by the prompt, such
-as exact object counts, angle measures, set membership, geometric relations,
-filled fractions, or functional shape behavior.
+The benchmark covers **420 problems** across seven core mathematical domains:
+counting, angle, fraction, function, plane geometry, set, and solid geometry.
+It includes a **350-problem Clean-Scene set** and a **70-problem Open-Scene
+set** with paired mathematical constraints. Each evaluator checks the
+mathematical relation specified by the prompt, such as exact object counts,
+angle measures, set membership, geometric relations, filled fractions, or
+functional shape behavior.
 
 <p align="center">
   <img src="assets/7domains.png" width="92%" alt="MathGen seven mathematical domains">
@@ -205,7 +207,7 @@ shown with <u>underline</u>.
 | BLIP3o-8B | 6.0 | 0.0 | 2.0 | 0.0 | 14.0 | 2.0 | 4.0 | 4.0 |
 | OmniGen2-7B | 4.0 | 0.0 | 2.0 | 0.0 | 12.0 | 2.0 | 8.0 | 4.0 |
 | **Closed-Source Models** |||||||||
-| FLUX-2-Pro | 22.0 | 10.0 | 20.0 | 18.0 | 62.0 | 16.0 | 20.0 | 24.0 |
+| FLUX-2-Pro | 22.0 | 10.0 | 20.0 | 18.0 | 54.0 | 16.0 | 20.0 | 22.9 |
 | FLUX-Kontext-Pro | 10.0 | 0.0 | 10.0 | 4.0 | 18.0 | 6.0 | 4.0 | 7.4 |
 | Seedream 3.0 | 14.0 | 0.0 | 2.0 | 0.0 | 24.0 | 6.0 | 8.0 | 7.7 |
 | Seedream 4.0 | 20.0 | 0.0 | 6.0 | 10.0 | 36.0 | 6.0 | 14.0 | 13.1 |
@@ -213,7 +215,7 @@ shown with <u>underline</u>.
 | Nano Banana | 20.0 | 8.0 | 24.0 | 10.0 | 64.0 | 10.0 | 24.0 | 22.9 |
 | Nano Banana Pro | <u>48.0</u> | **54.0** | <u>50.0</u> | **70.0** | **72.0** | **42.0** | **40.0** | **53.7** |
 | Imagen 4 | 12.0 | 2.0 | 2.0 | 2.0 | 12.0 | 0.0 | 12.0 | 6.0 |
-| Imagen 4 Ultra | 20.0 | 6.0 | 16.0 | 4.0 | 64.0 | 8.0 | 16.0 | 19.1 |
+| Imagen 4 Ultra | 20.0 | 6.0 | 16.0 | 4.0 | 42.0 | 8.0 | 16.0 | 16.0 |
 | GPT-Image-1 | 32.0 | 12.0 | 44.0 | 16.0 | 68.0 | <u>20.0</u> | 24.0 | 30.9 |
 | GPT-Image-1.5 | **56.0** | <u>24.0</u> | **54.0** | <u>22.0</u> | <u>70.0</u> | <u>20.0</u> | <u>28.0</u> | <u>39.1</u> |
 
@@ -237,10 +239,13 @@ This project is released under the [MIT License](LICENSE).
 If you find MathGen helpful, please consider citing our paper:
 
 ```bibtex
-@article{liu2026mathgen,
+@misc{liu2026mathgen,
   title={MathGen: Revealing the Illusion of Mathematical Competence through Text-to-Image Generation},
-  author={Liu, Ruiyao and Shen, Hui and Zhang, Ping and Hsieh, Yunta and Zhang, Yifan and Xu, Jing and Chen, Sicheng and Li, Junchen and Lu, Jiawei and Ma, Jianing and others},
-  journal={arXiv preprint arXiv:2603.27959},
-  year={2026}
+  author={Liu, Ruiyao and Shen, Hui and Zhang, Ping and Hsieh, Yunta and Zhang, Yifan and Xu, Jing and Han, Qi and Li, Junchen and Lu, Jiawei and Ma, Jianing and Mo, Jiaqi and Chen, Sicheng and Zhang, Zhen and Wan, Zhongwei and Xiong, Jing and Wang, Xin and Liu, Ziyuan and Cao, Hangrui and Wong, Ngai},
+  year={2026},
+  eprint={2603.27959},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2603.27959}
 }
 ```
