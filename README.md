@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2603.27959"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2603.27959-b31b1b"></a>
-  <a href="https://huggingface.co/datasets/Liuruiyao/MathGen"><img alt="Hugging Face Data" src="https://img.shields.io/badge/🤗%20Hugging%20Face-Data-yellow"></a>
+  <a href="https://huggingface.co/datasets/arielyao/MathGen"><img alt="Hugging Face Data" src="https://img.shields.io/badge/🤗%20Hugging%20Face-Data-yellow"></a>
   <a href="#leaderboard"><img alt="Leaderboard" src="https://img.shields.io/badge/🏆%20Leaderboard-Rank-blue"></a>
 </p>
 
