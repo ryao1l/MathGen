@@ -147,33 +147,6 @@ python run_benchmark.py \
   --workers 8
 ```
 
-## 📋 Evaluator Design
-
-Each row in `data/mapping.csv` maps a prompt to its evaluator.
-Counting and angle use one shared evaluator each because their prompt logic is
-compact and uniform. Other topics keep prompt-specific decision logic in their
-own scripts while reusing topic-level `*_common.py` utilities for image
-processing, geometry, fitting, masks, and report formatting.
-
-Every evaluator exposes:
-
-```python
-evaluate(image_path: str, ...) -> dict
-```
-
-The returned report follows this schema:
-
-```json
-{
-  "passed": true,
-  "criteria": {"constraint_name": true},
-  "meta": {"optional_debug_field": "value"}
-}
-```
-
-The evaluator for each prompt is listed in `data/mapping.csv`.
-
-<a id="leaderboard"></a>
 
 ## 🏆 Leaderboard
 
